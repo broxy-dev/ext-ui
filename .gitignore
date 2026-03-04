@@ -45,3 +45,8 @@ ext-ui/dist/
 ext/tampermonkey-loader.js
 ext/dist/broxy.js
 dist
+
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
