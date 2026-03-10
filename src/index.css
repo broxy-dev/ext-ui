@@ -84,7 +84,7 @@
   [role="button"]:not([role="switch"]),
   input,
   select,
-  textarea {
+  textarea:not(.auto-resize) {
     min-height: 44px;
   }
   
@@ -93,6 +93,11 @@
     min-height: 44px;
     min-width: 44px;
   }
+}
+
+/* Auto-resize textarea using CSS field-sizing */
+.auto-resize {
+  field-sizing: content;
 }
 
 /* Prevent text selection on mobile nav */

@@ -9,6 +9,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import {
   Select,
@@ -155,10 +156,11 @@ export function ToolEditorDialog({ open, tool, onSave, onClose }: ToolEditorDial
 
             <div className="space-y-2">
               <Label>{t('tools.description')}</Label>
-              <Input
+              <Textarea
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 placeholder={t('tools.descriptionPlaceholder')}
+                className="auto-resize min-h-[1.5rem] max-h-[15rem] resize-none"
               />
             </div>
 
