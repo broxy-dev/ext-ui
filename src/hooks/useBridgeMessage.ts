@@ -149,6 +149,9 @@ export function useBridgeMessage() {
       sendAction('executeHandler', { handler, args, isTool }),
     executeInitScript: () => sendAction('executeInitScript'),
     resetWebId: () => sendAction<{ success: boolean; webId: string }>('resetWebId'),
+    dragStart: (x: number, y: number) => {
+      window.parent.postMessage({ type: 'bb/action', action: 'dragStart', data: { x, y } }, '*');
+    },
   };
 
   return { state, actions, isConnecting, isMaximized, connectedAt };

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -42,6 +42,20 @@ function App() {
   const isConnected = state.status === 'connected';
   const isReconnecting = state.status === 'reconnecting';
   const hasError = state.status === 'error' || state.status === 'failed';
+
+  const handleDragStart = useCallback((e: React.MouseEvent | React.TouchEvent) => {
+    if (isMaximized) return;
+    
+    const target = e.target as HTMLElement;
+    const isInteractive = target.closest('button, a, input, [role="button"], [data-radix-collection-item]');
+    if (isInteractive) return;
+    
+    e.preventDefault();
+    const screenX = 'touches' in e ? e.touches[0].screenX : e.screenX;
+    const screenY = 'touches' in e ? e.touches[0].screenY : e.screenY;
+    
+    actions.dragStart(screenX, screenY);
+  }, [isMaximized, actions]);
 
   const tabs = [
     { value: 'info', icon: Info, label: t('tabs.info') },
@@ -128,7 +142,11 @@ function App() {
   return (
     <div className={`h-screen flex flex-col bg-background ${isMaximized ? 'rounded-none' : ''}`}>
       {/* Unified Header Bar */}
-      <div className="flex items-center justify-between px-3 py-1.5 border-b bg-muted">
+      <div 
+        className={`flex items-center justify-between px-3 py-1.5 border-b bg-muted ${!isMaximized ? 'cursor-move' : ''}`}
+        onMouseDown={handleDragStart}
+        onTouchStart={handleDragStart}
+      >
         {/* Left: Connection Button */}
         <div className="flex items-center justify-start">
           {isConnected ? (
