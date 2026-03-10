@@ -80,8 +80,8 @@
 
 /* Touch-friendly tap targets */
 @media (max-width: 640px) {
-  button,
-  [role="button"],
+  button:not([role="switch"]),
+  [role="button"]:not([role="switch"]),
   input,
   select,
   textarea {
