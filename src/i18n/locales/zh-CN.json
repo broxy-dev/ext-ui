@@ -73,7 +73,10 @@
     "authDisabled": "认证已禁用",
     "tokenCopied": "Token 已复制到剪贴板",
     "tokenGenerated": "Token 已生成",
-    "tokenGeneratedDesc": "新 Token 已生成，请保存设置"
+    "tokenGeneratedDesc": "新 Token 已生成，请保存设置",
+    "invalidUrl": "URL 格式无效",
+    "fetchFailed": "获取数据失败: {{message}}",
+    "httpError": "请求失败，状态码: {{status}}"
   },
   "routes": {
     "title": "路由管理",
@@ -171,9 +174,12 @@
     "initScriptPlaceholder": "// 在此输入初始化代码...",
     "saveScript": "保存脚本",
     "dataImportExport": "数据导入导出",
+    "dataExport": "数据导出",
+    "dataImport": "数据导入",
     "exportData": "导出 JSON 数据",
     "exportScript": "导出 JS 脚本数据",
     "exportScriptHint": "导出为 JS 脚本文件，包含完整配置数据，可在新环境中快速导入",
+    "importHint": "从文件、编辑器或远程 URL 导入配置数据",
     "importData": "导入数据",
     "importDataLabel": "导入数据 (JSON)",
     "importDataPlaceholder": "粘贴导出的 JSON 数据...",
@@ -181,7 +187,15 @@
     "editInitScriptWithLength": "编辑初始化脚本 ({{count}} 字符)",
     "importFromFile": "从文件导入 JSON",
     "importFromEditor": "从编辑器导入 JSON",
-    "importEditorTitle": "导入数据编辑器"
+    "importFromUrl": "从 URL 导入 JSON",
+    "importEditorTitle": "导入数据编辑器",
+    "importUrlTitle": "从 URL 导入",
+    "importUrlPlaceholder": "https://example.com/config.json",
+    "fetchData": "获取数据",
+    "dataPreview": "数据预览",
+    "confirmImport": "确认导入",
+    "pleaseFetchFirst": "请先获取数据",
+    "importWarning": "导入前请确认数据来源可信"
   },
   "theme": {
     "light": "日间模式",

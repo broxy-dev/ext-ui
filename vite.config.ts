@@ -3,8 +3,6 @@ import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 import path from 'path'
 
-import { cloudflare } from "@cloudflare/vite-plugin";
-
 export default defineConfig({
   plugins: [react(), VitePWA({
     registerType: 'autoUpdate',
@@ -64,7 +62,7 @@ export default defineConfig({
         },
       ],
     },
-  }), cloudflare()],
+  })],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

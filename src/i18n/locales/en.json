@@ -73,7 +73,10 @@
     "authDisabled": "Authentication disabled",
     "tokenCopied": "Token copied to clipboard",
     "tokenGenerated": "Token generated",
-    "tokenGeneratedDesc": "New token generated, please save settings"
+    "tokenGeneratedDesc": "New token generated, please save settings",
+    "invalidUrl": "Invalid URL format",
+    "fetchFailed": "Failed to fetch data: {{message}}",
+    "httpError": "Request failed with status {{status}}"
   },
   "routes": {
     "title": "Route Management",
@@ -171,9 +174,12 @@
     "initScriptPlaceholder": "// Enter initialization code here...",
     "saveScript": "Save Script",
     "dataImportExport": "Data Import/Export",
+    "dataExport": "Data Export",
+    "dataImport": "Data Import",
     "exportData": "Export JSON Data",
     "exportScript": "Export JS Script Data",
     "exportScriptHint": "Export as a JS script file containing complete config data for quick import in new environments",
+    "importHint": "Import configuration data from file, editor or remote URL",
     "importData": "Import Data",
     "importDataLabel": "Import Data (JSON)",
     "importDataPlaceholder": "Paste exported JSON data here...",
@@ -181,7 +187,15 @@
     "editInitScriptWithLength": "Edit Init Script ({{count}} chars)",
     "importFromFile": "Import JSON from File",
     "importFromEditor": "Import JSON from Editor",
-    "importEditorTitle": "Import Data Editor"
+    "importFromUrl": "Import JSON from URL",
+    "importEditorTitle": "Import Data Editor",
+    "importUrlTitle": "Import from URL",
+    "importUrlPlaceholder": "https://example.com/config.json",
+    "fetchData": "Fetch Data",
+    "dataPreview": "Data Preview",
+    "confirmImport": "Confirm Import",
+    "pleaseFetchFirst": "Please fetch data first",
+    "importWarning": "Make sure you trust the data source before importing"
   },
   "theme": {
     "light": "Light Mode",

@@ -4,7 +4,14 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Download, Settings as SettingsIcon, Code, FileUp, Edit3, Shield, RefreshCw, Copy, FileCode } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from '@/components/ui/dialog';
+import { Download, Settings as SettingsIcon, Code, FileUp, Edit3, Shield, RefreshCw, Copy, FileCode, Link, Loader2, Upload, AlertTriangle } from 'lucide-react';
 import { useToast } from '@/hooks/useToast';
 import { useLocale } from '@/hooks/useLocale';
 import { CodeEditorDialog } from '@/components/CodeEditorDialog';
@@ -28,8 +35,13 @@ export function Settings({ state, actions }: SettingsProps) {
   const [authToken, setAuthToken] = useState(state.authToken);
   const [authEnabled, setAuthEnabled] = useState(state.authEnabled);
   const [importText, setImportText] = useState('');
+  const [importUrl, setImportUrl] = useState('');
+  const [previewData, setPreviewData] = useState<any>(null);
   const [showInitScriptDialog, setShowInitScriptDialog] = useState(false);
   const [showImportDialog, setShowImportDialog] = useState(false);
+  const [showUrlDialog, setShowUrlDialog] = useState(false);
+  const [importing, setImporting] = useState(false);
+  const [fetching, setFetching] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -221,6 +233,80 @@ window.__BROXY_INIT_DATA__ = ${jsonStr};
     }
   };
 
+  const handleFetchData = async () => {
+    const url = importUrl.trim();
+    if (!url) {
+      toast({
+        title: t('toast.importFailed'),
+        description: t('toast.pleasePasteData'),
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    try {
+      new URL(url);
+    } catch {
+      toast({
+        title: t('toast.importFailed'),
+        description: t('toast.invalidUrl'),
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    setFetching(true);
+    setPreviewData(null);
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(t('toast.httpError', { status: response.status }));
+      }
+      const data = await response.json();
+      setPreviewData(data);
+    } catch (err: any) {
+      toast({
+        title: t('toast.importFailed'),
+        description: err.message || t('toast.fetchFailed', { message: 'Unknown error' }),
+        variant: 'destructive',
+      });
+    } finally {
+      setFetching(false);
+    }
+  };
+
+  const handleConfirmImport = async () => {
+    if (!previewData) {
+      toast({
+        title: t('toast.importFailed'),
+        description: t('settings.pleaseFetchFirst'),
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    setImporting(true);
+    try {
+      await actions.importData(previewData);
+      setImportUrl('');
+      setPreviewData(null);
+      setShowUrlDialog(false);
+      toast({
+        title: t('toast.importSuccess'),
+        description: t('toast.dataImported'),
+        variant: 'success',
+      });
+    } catch (err: any) {
+      toast({
+        title: t('toast.importFailed'),
+        description: err.message,
+        variant: 'destructive',
+      });
+    } finally {
+      setImporting(false);
+    }
+  };
+
   return (
     <ScrollArea className="h-full">
       <div className="p-4 space-y-6">
@@ -334,7 +420,7 @@ window.__BROXY_INIT_DATA__ = ${jsonStr};
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <Download className="h-4 w-4" />
-            <h3 className="font-medium">{t('settings.dataImportExport')}</h3>
+            <h3 className="font-medium">{t('settings.dataExport')}</h3>
           </div>
           <div className="space-y-3 pl-6">
             <div className="flex gap-2 flex-wrap">
@@ -347,7 +433,18 @@ window.__BROXY_INIT_DATA__ = ${jsonStr};
                 {t('settings.exportScript')}
               </Button>
             </div>
+            <p className="text-xs text-muted-foreground">
+              {t('settings.exportScriptHint')}
+            </p>
+          </div>
+        </div>
 
+        <div className="space-y-4">
+          <div className="flex items-center gap-2">
+            <Upload className="h-4 w-4" />
+            <h3 className="font-medium">{t('settings.dataImport')}</h3>
+          </div>
+          <div className="space-y-3 pl-6">
             <div className="flex gap-2 flex-wrap">
               <Button variant="outline" onClick={handleImportFromFile}>
                 <FileUp className="h-4 w-4 mr-1" />
@@ -357,10 +454,13 @@ window.__BROXY_INIT_DATA__ = ${jsonStr};
                 <Edit3 className="h-4 w-4 mr-1" />
                 {t('settings.importFromEditor')}
               </Button>
+              <Button variant="outline" onClick={() => setShowUrlDialog(true)}>
+                <Link className="h-4 w-4 mr-1" />
+                {t('settings.importFromUrl')}
+              </Button>
             </div>
-            
             <p className="text-xs text-muted-foreground">
-              {t('settings.exportScriptHint')}
+              {t('settings.importHint')}
             </p>
           </div>
         </div>
@@ -386,6 +486,62 @@ window.__BROXY_INIT_DATA__ = ${jsonStr};
         onClose={() => setShowImportDialog(false)}
         language="json"
       />
+
+      <Dialog open={showUrlDialog} onOpenChange={(open) => {
+        setShowUrlDialog(open);
+        if (!open) {
+          setPreviewData(null);
+        }
+      }}>
+        <DialogContent className="max-w-4xl w-[95vw] h-[90vh] max-h-[90vh] flex flex-col">
+          <DialogHeader>
+            <DialogTitle>{t('settings.importUrlTitle')}</DialogTitle>
+          </DialogHeader>
+          <div className="flex-1 flex flex-col min-h-0 space-y-4">
+            <div className="flex gap-2">
+              <Input
+                value={importUrl}
+                onChange={(e) => setImportUrl(e.target.value)}
+                placeholder={t('settings.importUrlPlaceholder')}
+                disabled={fetching || importing}
+                className="flex-1"
+              />
+              <Button onClick={handleFetchData} disabled={fetching || importing}>
+                {fetching && <Loader2 className="h-4 w-4 mr-1 animate-spin" />}
+                {t('settings.fetchData')}
+              </Button>
+            </div>
+
+            {previewData && (
+              <>
+                <div className="flex items-center gap-2 text-amber-600 dark:text-amber-500">
+                  <AlertTriangle className="h-4 w-4" />
+                  <span className="text-sm">{t('settings.importWarning')}</span>
+                </div>
+                <div className="flex-1 min-h-0 border rounded-md overflow-hidden">
+                  <div className="bg-muted px-3 py-2 text-sm font-medium border-b">
+                    {t('settings.dataPreview')}
+                  </div>
+                  <ScrollArea className="h-[calc(100%-36px)]">
+                    <pre className="p-3 text-xs font-mono whitespace-pre-wrap break-all">
+                      {JSON.stringify(previewData, null, 2)}
+                    </pre>
+                  </ScrollArea>
+                </div>
+              </>
+            )}
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowUrlDialog(false)} disabled={importing}>
+              {t('common.cancel')}
+            </Button>
+            <Button onClick={handleConfirmImport} disabled={!previewData || importing}>
+              {importing && <Loader2 className="h-4 w-4 mr-1 animate-spin" />}
+              {t('settings.confirmImport')}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </ScrollArea>
   );
 }
