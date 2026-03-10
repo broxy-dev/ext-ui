@@ -192,6 +192,7 @@
     "importFromUrl": "Import JSON from URL",
     "importEditorTitle": "Import Data Editor",
     "importUrlTitle": "Import from URL",
+    "importFileTitle": "Import from File",
     "importUrlPlaceholder": "https://example.com/config.json",
     "fetchData": "Fetch Data",
     "dataPreview": "Data Preview",

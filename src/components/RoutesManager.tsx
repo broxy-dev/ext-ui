@@ -117,9 +117,9 @@ export function RoutesManager({ routes, actions }: RoutesManagerProps) {
                     {route.method.toUpperCase()}
                   </Badge>
                   <div className="min-w-0 flex-1">
-                    <div className="font-medium text-sm truncate">{route.name}</div>
-                    <div className="text-xs text-muted-foreground font-mono truncate hidden xs:block">
-                      {route.pattern}
+                    <div className="font-medium text-sm font-mono truncate">{route.pattern}</div>
+                    <div className="text-xs text-muted-foreground truncate hidden xs:block">
+                      {route.name}{route.description ? ` | ${route.description}` : ''}
                     </div>
                   </div>
                 </div>

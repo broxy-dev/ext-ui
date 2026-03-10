@@ -107,7 +107,7 @@ export function ToolsManager({ tools, actions }: ToolsManagerProps) {
                 <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
                   <div className="min-w-0 flex-1">
                     <div className="font-medium text-sm truncate">{tool.name}</div>
-                    <div className="text-xs text-muted-foreground truncate hidden xs:block">
+                    <div className="text-xs text-muted-foreground hidden xs:block line-clamp-2 break-words">
                       {tool.description || t('tools.noDescription')}
                     </div>
                   </div>

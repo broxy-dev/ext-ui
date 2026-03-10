@@ -192,6 +192,7 @@
     "importFromUrl": "从 URL 导入 JSON",
     "importEditorTitle": "导入数据编辑器",
     "importUrlTitle": "从 URL 导入",
+    "importFileTitle": "从文件导入",
     "importUrlPlaceholder": "https://example.com/config.json",
     "fetchData": "获取数据",
     "dataPreview": "数据预览",
