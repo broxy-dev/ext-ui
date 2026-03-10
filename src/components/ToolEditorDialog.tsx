@@ -137,7 +137,7 @@ export function ToolEditorDialog({ open, tool, onSave, onClose }: ToolEditorDial
 
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className="w-screen h-screen max-w-none rounded-none flex flex-col p-4">
+      <DialogContent onEscapeKeyDown={(e) => e.preventDefault()} className="w-screen h-screen max-w-none rounded-none flex flex-col p-4">
         <DialogHeader>
           <DialogTitle>{tool ? t('tools.editTool') : t('tools.addTool')}</DialogTitle>
         </DialogHeader>
