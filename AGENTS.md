@@ -168,6 +168,11 @@ The app uses `vite-plugin-pwa` for Progressive Web App support:
 - Use `npm run deploy` to build and deploy
 - No separate config files needed when using Cloudflare's Git integration
 
+## Git Operations
+
+- Do NOT proactively run `git commit` or `git push` commands
+- Only perform git commits or pushes when explicitly requested by the user
+
 ## Before Committing
 
 1. Run `npm run lint` to check for linting errors

@@ -30,7 +30,9 @@
     "disconnecting": "停止中",
     "maximize": "最大化",
     "restore": "还原",
-    "close": "关闭"
+    "close": "关闭",
+    "officialSite": "官方网站",
+    "openSource": "开源地址"
   },
   "tabs": {
     "info": "基本信息",

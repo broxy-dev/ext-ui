@@ -30,7 +30,9 @@
     "disconnecting": "Stopping",
     "maximize": "Maximize",
     "restore": "Restore",
-    "close": "Close"
+    "close": "Close",
+    "officialSite": "Official Site",
+    "openSource": "GitHub"
   },
   "tabs": {
     "info": "Info",

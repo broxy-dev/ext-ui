@@ -177,17 +177,26 @@ function App() {
         </div>
         
         {/* Center: Logo */}
-        <div className="flex items-center justify-center">
-          <a 
-            href="https://broxy.dev" 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            className="flex items-center cursor-pointer hover:opacity-80 transition-opacity"
-          >
-            <Logo className="h-5 w-5" />
-            <h1 className="hidden md:block text-base font-semibold ml-1.5">Broxy.Dev</h1>
-          </a>
-        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <div className="flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity">
+              <Logo className="h-5 w-5" />
+              <h1 className="hidden md:block text-base font-semibold ml-1.5">Broxy.Dev</h1>
+            </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="center">
+            <DropdownMenuItem asChild>
+              <a href="https://broxy.dev" target="_blank" rel="noopener noreferrer">
+                {t('header.officialSite')}
+              </a>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <a href="https://github.com/broxy-dev" target="_blank" rel="noopener noreferrer">
+                {t('header.openSource')}
+              </a>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
         
         {/* Right: Language + Theme + Maximize + Close */}
         <div className="flex items-center justify-end gap-1">
