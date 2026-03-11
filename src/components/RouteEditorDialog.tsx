@@ -33,7 +33,27 @@ const defaultRoute: Omit<Route, 'id'> = {
   pattern: '',
   method: 'all',
   description: '',
-  handler: 'async (method, path, query, body, headers) => {\n  return { message: "Hello from custom route" };\n}',
+  handler: `async (method, path, query, body, headers) => {
+  // 简单返回 JSON (状态码 200)
+  // return { message: "Hello" };
+
+  // 自定义响应格式:
+  // return {
+  //   status: 201,                              // HTTP 状态码
+  //   headers: { 'Content-Type': 'text/html' }, // 响应头
+  //   body: '<html><body>Hello</body></html>'   // 响应体
+  // };
+
+  // 图片示例 (isBase64: true 会自动解码 base64):
+  // return {
+  //   status: 200,
+  //   headers: { 'Content-Type': 'image/png' },
+  //   body: 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
+  //   isBase64: true
+  // };
+
+  return { message: "Hello from custom route" };
+}`,
   enabled: true,
 };
 
