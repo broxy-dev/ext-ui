@@ -152,7 +152,8 @@
     "actionSuccess": "成功",
     "typeConnection": "连接",
     "typeInitScript": "初始化脚本",
-    "typeAuth": "认证"
+    "typeAuth": "认证",
+    "viewFullContent": "查看完整"
   },
   "settings": {
     "title": "设置",

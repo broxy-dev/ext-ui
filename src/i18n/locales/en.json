@@ -152,7 +152,8 @@
     "actionSuccess": "Success",
     "typeConnection": "Connection",
     "typeInitScript": "Init Script",
-    "typeAuth": "Auth"
+    "typeAuth": "Auth",
+    "viewFullContent": "View Full"
   },
   "settings": {
     "title": "Settings",

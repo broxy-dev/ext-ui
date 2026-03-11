@@ -12,7 +12,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { Trash2, ChevronDown, ChevronUp, FileText, Wifi, Code, Shield } from 'lucide-react';
+import { CodeEditorDialog } from '@/components/CodeEditorDialog';
+import { Trash2, ChevronDown, ChevronUp, FileText, Wifi, Code, Shield, Maximize2 } from 'lucide-react';
 import { useLocale } from '@/hooks/useLocale';
 import type { LogEntry } from '@/types';
 
@@ -22,6 +23,17 @@ interface LogsPanelProps {
     clearLogs: () => Promise<void>;
   };
 }
+
+const MAX_DISPLAY_LENGTH = 300;
+
+const truncateString = (str: string, maxLen: number) => {
+  if (str.length <= maxLen) return { text: str, truncated: false, fullText: str };
+  return {
+    text: str.slice(0, maxLen) + '\n...',
+    truncated: true,
+    fullText: str,
+  };
+};
 
 const isSystemLog = (log: LogEntry) => {
   return ['connection', 'initScript', 'auth'].includes(log.type);
@@ -100,6 +112,11 @@ export function LogsPanel({ logs, actions }: LogsPanelProps) {
   const { t } = useLocale();
   const [expandedId, setExpandedId] = useState<number | null>(null);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
+  const [fullContentDialog, setFullContentDialog] = useState<{
+    open: boolean;
+    title: string;
+    content: string;
+  }>({ open: false, title: '', content: '' });
 
   const handleClearConfirm = async () => {
     await actions.clearLogs();
@@ -110,13 +127,19 @@ export function LogsPanel({ logs, actions }: LogsPanelProps) {
     setExpandedId(expandedId === id ? null : id);
   };
 
-  const formatJson = (data: any) => {
-    if (!data) return '-';
+  const formatJson = (data: any): { text: string; truncated: boolean; fullText: string } => {
+    if (!data) return { text: '-', truncated: false, fullText: '-' };
     try {
-      return JSON.stringify(data, null, 2);
+      const str = JSON.stringify(data, null, 2);
+      return truncateString(str, MAX_DISPLAY_LENGTH);
     } catch {
-      return String(data);
+      const str = String(data);
+      return truncateString(str, MAX_DISPLAY_LENGTH);
     }
+  };
+
+  const handleViewFullContent = (title: string, content: string) => {
+    setFullContentDialog({ open: true, title, content });
   };
 
   const renderLogHeader = (log: LogEntry) => {
@@ -156,41 +179,42 @@ export function LogsPanel({ logs, actions }: LogsPanelProps) {
   };
 
   const renderLogDetail = (log: LogEntry) => {
+    const renderField = (label: string, data: any) => {
+      const { text, truncated, fullText } = formatJson(data);
+      return (
+        <div>
+          <span className="text-muted-foreground">{label}:</span>
+          <pre className="mt-1 p-2 bg-background rounded text-xs whitespace-pre-wrap break-all">
+            {text}
+          </pre>
+          {truncated && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-6 px-2 text-xs mt-1"
+              onClick={() => handleViewFullContent(label, fullText)}
+            >
+              <Maximize2 className="h-3 w-3 mr-1" />
+              {t('logs.viewFullContent')}
+            </Button>
+          )}
+        </div>
+      );
+    };
+
     if (isSystemLog(log)) {
       return (
         <div className="p-3 border-t bg-muted/50 space-y-2 text-sm font-mono">
-          {log.details && (
-            <div>
-              <span className="text-muted-foreground">{t('logs.details')}:</span>
-              <pre className="mt-1 p-2 bg-background rounded overflow-auto text-xs">
-                {formatJson(log.details)}
-              </pre>
-            </div>
-          )}
+          {log.details && renderField(t('logs.details'), log.details)}
         </div>
       );
     }
 
     return (
       <div className="p-3 border-t bg-muted/50 space-y-2 text-sm font-mono">
-        <div>
-          <span className="text-muted-foreground">{t('logs.query')}:</span>
-          <pre className="mt-1 p-2 bg-background rounded overflow-auto text-xs">
-            {formatJson(log.query)}
-          </pre>
-        </div>
-        <div>
-          <span className="text-muted-foreground">{t('logs.body')}:</span>
-          <pre className="mt-1 p-2 bg-background rounded overflow-auto text-xs">
-            {formatJson(log.body)}
-          </pre>
-        </div>
-        <div>
-          <span className="text-muted-foreground">{t('logs.result')}:</span>
-          <pre className="mt-1 p-2 bg-background rounded overflow-auto text-xs max-h-48">
-            {formatJson(log.result)}
-          </pre>
-        </div>
+        {renderField(t('logs.query'), log.query)}
+        {renderField(t('logs.body'), log.body)}
+        {renderField(t('logs.result'), log.result)}
       </div>
     );
   };
@@ -269,6 +293,15 @@ export function LogsPanel({ logs, actions }: LogsPanelProps) {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <CodeEditorDialog
+        open={fullContentDialog.open}
+        title={fullContentDialog.title}
+        value={fullContentDialog.content}
+        language="json"
+        readOnly
+        onClose={() => setFullContentDialog(prev => ({ ...prev, open: false }))}
+      />
     </div>
   );
 }

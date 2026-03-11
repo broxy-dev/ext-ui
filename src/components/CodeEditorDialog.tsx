@@ -15,11 +15,12 @@ interface CodeEditorDialogProps {
   open: boolean;
   title: string;
   value: string;
-  onChange: (value: string) => void;
-  onSave: () => void;
+  onChange?: (value: string) => void;
+  onSave?: () => void;
   onClose: () => void;
   language?: string;
   description?: string;
+  readOnly?: boolean;
 }
 
 export function CodeEditorDialog({
@@ -31,6 +32,7 @@ export function CodeEditorDialog({
   onClose,
   language = 'javascript',
   description,
+  readOnly = false,
 }: CodeEditorDialogProps) {
   const { t } = useLocale();
   const { theme } = useTheme();
@@ -53,13 +55,14 @@ export function CodeEditorDialog({
               defaultLanguage={language}
               theme={theme === 'dark' ? 'vs-dark' : 'vs-light'}
               value={value}
-              onChange={(v) => onChange(v || '')}
+              onChange={(v) => onChange?.(v || '')}
               options={{
                 minimap: { enabled: false },
                 fontSize: 13,
                 lineNumbers: 'on',
                 scrollBeyondLastLine: false,
                 wordWrap: 'on',
+                readOnly,
               }}
             />
           </div>
@@ -67,9 +70,11 @@ export function CodeEditorDialog({
 
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>
-            {t('common.cancel')}
+            {readOnly ? t('common.confirm') : t('common.cancel')}
           </Button>
-          <Button onClick={onSave}>{t('common.save')}</Button>
+          {!readOnly && onSave && (
+            <Button onClick={onSave}>{t('common.save')}</Button>
+          )}
         </DialogFooter>
       </DialogContent>
     </Dialog>
