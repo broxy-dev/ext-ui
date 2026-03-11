@@ -4,61 +4,55 @@ Guidelines for AI coding agents working in this repository.
 
 ## Project Overview
 
-This is a React + TypeScript + Vite frontend application for Broxy, a web-based MCP (Model Context Protocol) server management UI. It uses Tailwind CSS and Radix UI components following the shadcn/ui pattern. The app is deployed to Cloudflare Pages with PWA support for offline caching.
+React + TypeScript + Vite frontend for Broxy MCP server management. Uses Tailwind CSS and Radix UI (shadcn/ui pattern). Deployed to Cloudflare Pages with PWA support.
 
 ## Build/Lint/Test Commands
 
 ```bash
-npm run dev          # Start development server on port 3000
-npm run build        # Type-check and build for production (tsc -b && vite build)
+npm run dev          # Start dev server on port 3000
+npm run build        # Type-check and build (tsc -b && vite build)
 npm run lint         # Run ESLint on all files
-npm run preview      # Preview production build locally (build + wrangler dev)
+npm run preview      # Preview production build locally
 npm run deploy       # Build and deploy to Cloudflare Pages
 ```
 
-Note: No test framework is currently configured in this project.
+Note: No test framework is configured. Run lint and build before committing.
 
 ## Code Style Guidelines
 
 ### Imports
 
-Order imports as follows, separated by blank lines:
+Order imports with blank line separators:
 
-1. React imports (e.g., `import { useState, useEffect } from 'react'`)
-2. Third-party packages (e.g., Radix UI, Lucide icons, i18next)
-3. Local imports using `@/` path alias (e.g., `import { Button } from '@/components/ui/button'`)
-4. Type-only imports last (e.g., `import type { AppState } from '@/types'`)
+1. React imports
+2. Third-party packages (Radix UI, Lucide icons, i18next)
+3. Local imports using `@/` alias
+4. Type-only imports last
 
-Example:
 ```typescript
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/useToast';
+import { Download, Settings, Code } from 'lucide-react';
 import type { AppState } from '@/types';
 ```
 
 ### Path Aliases
 
-Use `@/` for all imports from `src/`:
+Always use `@/` for src imports:
 
 ```typescript
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
 import type { Route } from '@/types';
 ```
 
 ### Component Conventions
 
-- Use named exports for components:
+- Named exports only (no default exports):
   ```typescript
   export function ComponentName({ prop }: Props) { ... }
   ```
-- For forwardRef components, set `displayName`:
-  ```typescript
-  Button.displayName = 'Button';
-  ```
-- Use PascalCase for component files (e.g., `Settings.tsx`, `RouteEditorDialog.tsx`)
-- Define explicit interfaces for props before the component:
+- Define props interface before component:
   ```typescript
   interface SettingsProps {
     state: AppState;
@@ -67,42 +61,46 @@ import type { Route } from '@/types';
     };
   }
   ```
+- forwardRef components need displayName:
+  ```typescript
+  Button.displayName = 'Button';
+  ```
+- PascalCase for component files: `Settings.tsx`, `RouteEditorDialog.tsx`
 
 ### TypeScript
 
-- Strict mode is enabled with additional checks: `noUnusedLocals`, `noUnusedParameters`, `noFallthroughCasesInSwitch`, `noUncheckedSideEffectImports`
-- Use `type` for type aliases and `interface` for object shapes that can be extended
-- Prefer `import type` for type-only imports when appropriate
-- Use explicit return types for exported functions when helpful for documentation
+- Strict mode with `noUnusedLocals`, `noUnusedParameters`, `noFallthroughCasesInSwitch`
+- Use `interface` for object shapes, `type` for unions/aliases
+- Use `import type` for type-only imports
+- Catch errors as `err: any` for error.message access
 
 ### Styling
 
-- Use Tailwind CSS utility classes exclusively
-- Use the `cn()` utility from `@/lib/utils` for conditional class merging:
+- Tailwind CSS utilities only - no custom CSS classes
+- Use `cn()` for conditional class merging:
   ```typescript
   className={cn('base-classes', condition && 'conditional-class')}
   ```
-- Follow shadcn/ui patterns for UI components in `src/components/ui/`
-- Use CSS variables for theming (defined in index.css)
+- CSS variables for theming (defined in index.css)
+- Follow shadcn/ui patterns in `src/components/ui/`
 
 ### Hooks
 
-- Custom hooks go in `src/hooks/` and start with `use` prefix
-- Use `useCallback` for stable function references in dependencies
-- Use `useRef` for mutable values that don't trigger re-renders
-- Export both the hook and any related utilities/constants
+- Custom hooks in `src/hooks/` with `use` prefix
+- Use `useCallback` for stable function references
+- Use `useRef` for mutable values without re-renders
 
-### Internationalization
+### Internationalization (CRITICAL)
 
-- All user-facing strings MUST use i18next
-- Use the `useLocale()` hook for translations:
+- ALL user-facing strings MUST use i18next
+- Use `useLocale()` hook:
   ```typescript
   const { t } = useLocale();
   return <span>{t('settings.title')}</span>;
   ```
-- Translation files are in `src/i18n/locales/` (en.json, zh-CN.json)
-- When adding new i18n keys, add translations to BOTH locale files
-- Use interpolation for dynamic values: `t('toast.jsonParseFailed', { message: err.message })`
+- Translation files: `src/i18n/locales/en.json`, `src/i18n/locales/zh-CN.json`
+- Add keys to BOTH locale files
+- Interpolation: `t('toast.jsonParseFailed', { message: err.message })`
 
 ### Error Handling
 
@@ -111,71 +109,65 @@ import type { Route } from '@/types';
   ```typescript
   try {
     await actions.saveConfig(config);
-    toast({ title: t('toast.success'), variant: 'success' });
+    toast({ title: t('toast.saveSuccess'), variant: 'success' });
   } catch (err: any) {
     toast({ title: t('toast.error'), description: err.message, variant: 'destructive' });
   }
   ```
-- Always provide user-friendly error messages with i18n
 
 ### Naming Conventions
 
-- Components: PascalCase (e.g., `RoutesManager`, `CodeEditorDialog`)
-- Functions: camelCase (e.g., `handleSave`, `formatDuration`)
-- Constants: SCREAMING_SNAKE_CASE for true constants (e.g., `TOAST_LIMIT`)
-- Files: PascalCase for components, camelCase for utilities/hooks
-- CSS classes: Use Tailwind utilities only; no custom CSS classes
+| Type | Convention | Example |
+|------|------------|---------|
+| Components | PascalCase | `RoutesManager`, `CodeEditorDialog` |
+| Functions | camelCase | `handleSave`, `formatDuration` |
+| Constants | SCREAMING_SNAKE_CASE | `TOAST_LIMIT` |
+| Files | PascalCase (components), camelCase (hooks/utils) | `useToast.ts` |
 
 ### State Management
 
-- Use React's built-in hooks (useState, useReducer, useContext)
-- Lift state up when needed
-- For complex state, prefer useReducer with typed actions
-- Use custom hooks to encapsulate related state and logic
+- Use React built-in hooks (useState, useReducer, useContext)
+- Lift state up when multiple components need it
+- Prefer useReducer for complex state with typed actions
 
-### File Structure
+## File Structure
 
 ```
 src/
   components/       # React components
-    ui/            # Base UI components (shadcn/ui style)
-  hooks/           # Custom React hooks (useToast, useLocale, useTheme, etc.)
-  lib/             # Utility functions (cn utility)
-  types/           # TypeScript type definitions (index.ts)
-  i18n/            # Internationalization config and locales
-    locales/       # Translation JSON files (en.json, zh-CN.json)
+    ui/            # Base UI components (shadcn/ui)
+  hooks/           # Custom hooks (useToast, useLocale, useTheme)
+  lib/             # Utility functions (cn)
+  types/           # TypeScript definitions (index.ts)
+  i18n/            # Internationalization
+    locales/       # Translation files (en.json, zh-CN.json)
 ```
 
 ## TypeScript Configuration
 
-- Target: ES2020
-- Module: ESNext with bundler resolution
-- JSX: react-jsx
-- Strict mode enabled
-- Path alias `@/*` maps to `./src/*`
+- Target: ES2020, Module: ESNext with bundler resolution
+- JSX: react-jsx, Strict mode enabled
+- Path alias: `@/*` maps to `./src/*`
 
 ## PWA Support
 
-The app uses `vite-plugin-pwa` for Progressive Web App support:
-- Service worker registered in `main.tsx`
+- Uses `vite-plugin-pwa` for offline caching
+- Service worker registered in main.tsx
 - App icon at `public/icon.svg`
-- PWA manifest configured in `vite.config.ts`
-- Offline caching for static assets and Google Fonts
 
 ## Deployment
 
-- Configured for Cloudflare Pages deployment via `wrangler`
+- Cloudflare Pages via wrangler
 - Use `npm run deploy` to build and deploy
-- No separate config files needed when using Cloudflare's Git integration
-
-## Git Operations
-
-- Do NOT proactively run `git commit` or `git push` commands
-- Only perform git commits or pushes when explicitly requested by the user
 
 ## Before Committing
 
-1. Run `npm run lint` to check for linting errors
-2. Run `npm run build` to verify TypeScript compiles without errors
-3. Ensure all new user-facing text uses i18n translations (both en.json and zh-CN.json)
-4. Verify the app works in both light and dark themes
+1. Run `npm run lint` - fix all errors
+2. Run `npm run build` - must compile without errors
+3. Add i18n keys to both en.json and zh-CN.json
+4. Verify both light and dark themes work
+
+## Git Operations
+
+- Do NOT commit unless explicitly requested
+- Never run `git push` without user request

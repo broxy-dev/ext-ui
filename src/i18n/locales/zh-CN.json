@@ -38,6 +38,7 @@
     "info": "基本信息",
     "routes": "路由",
     "tools": "工具",
+    "skill": "技能",
     "logs": "日志",
     "settings": "设置"
   },
@@ -208,5 +209,28 @@
   "languages": {
     "zh-CN": "简体中文",
     "en": "English"
+  },
+  "skill": {
+    "title": "技能配置",
+    "name": "技能名称",
+    "namePlaceholder": "我的 MCP 技能",
+    "nameHint": "SKILL.md frontmatter 中的技能名称。",
+    "usingDefault": "使用 MCP 名称: {{name}}",
+    "description": "技能描述",
+    "descriptionPlaceholder": "当需要与 MCP 服务器交互进行数据处理、API 调用或工具执行时使用此技能。",
+    "descriptionHint": "告诉 AI 何时应该调用此技能，这是主要的触发机制。",
+    "usageNotes": "使用说明",
+    "usageNotesPlaceholder": "添加任何额外的说明、提示或使用示例...",
+    "usageNotesHint": "帮助 AI 使用此技能的额外说明或示例。",
+    "configSaved": "技能配置已保存",
+    "contentCopied": "SKILL.md 内容已复制到剪贴板",
+    "fileDownloaded": "SKILL.md 文件已下载",
+    "download": "下载",
+    "guide": {
+      "title": "使用说明",
+      "usage": "复制或下载 SKILL.md 到支持 skills 的 AI 客户端（如 Claude Code、OpenCode、OpenClaw 等）",
+      "example": "示例: 复制到 ~/.claude/skills/{skillName}/SKILL.md",
+      "tip": "请详细精准地填写名称和描述，帮助 AI 理解何时调用此技能。"
+    }
   }
 }

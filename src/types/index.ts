@@ -54,6 +54,13 @@ export interface MCPConfig {
   version: string;
 }
 
+// Skill 配置
+export interface SkillConfig {
+  name: string;
+  description: string;
+  usageNotes: string;
+}
+
 // 应用状态
 export interface AppState {
   webId: string;
@@ -66,6 +73,7 @@ export interface AppState {
   workerDomain: string;
   authToken: string;
   authEnabled: boolean;
+  skillConfig: SkillConfig;
 }
 
 // 通信消息类型

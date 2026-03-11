@@ -15,6 +15,7 @@ export function useBridgeMessage() {
     workerDomain: '',
     authToken: '',
     authEnabled: false,
+    skillConfig: { name: '', description: '', usageNotes: '' },
   });
 
   const [isConnecting, setIsConnecting] = useState(false);

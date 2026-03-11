@@ -17,8 +17,9 @@ import { RoutesManager } from '@/components/RoutesManager';
 import { ToolsManager } from '@/components/ToolsManager';
 import { LogsPanel } from '@/components/LogsPanel';
 import { Settings } from '@/components/Settings';
+import { SkillPanel } from '@/components/SkillPanel';
 import { Logo } from '@/components/Logo';
-import { Wifi, WifiOff, RefreshCw, Route as RouteIcon, Wrench, FileText, Settings as SettingsIcon, Info, X, Maximize2, Minimize2, Loader2, Globe, Sun, Moon } from 'lucide-react';
+import { Wifi, WifiOff, RefreshCw, Route as RouteIcon, Wrench, FileText, Settings as SettingsIcon, Info, X, Maximize2, Minimize2, Loader2, Globe, Sun, Moon, FileCode } from 'lucide-react';
 
 function formatDuration(ms: number): string {
   const totalSeconds = Math.floor(ms / 1000);
@@ -61,6 +62,7 @@ function App() {
     { value: 'info', icon: Info, label: t('tabs.info') },
     { value: 'routes', icon: RouteIcon, label: t('tabs.routes'), count: state.routes.length },
     { value: 'tools', icon: Wrench, label: t('tabs.tools'), count: state.tools.length },
+    { value: 'skill', icon: FileCode, label: t('tabs.skill'), beta: true },
     { value: 'logs', icon: FileText, label: t('tabs.logs'), count: state.logs.length },
     { value: 'settings', icon: SettingsIcon, label: t('tabs.settings') },
   ];
@@ -260,6 +262,11 @@ function App() {
               <TabsTrigger key={tab.value} value={tab.value} className="gap-1">
                 <tab.icon className="h-3.5 w-3.5" />
                 {tab.label}
+                {tab.beta && (
+                  <Badge variant="outline" className="ml-1 text-[10px] px-1 h-4 border-amber-500 text-amber-600 dark:text-amber-400">
+                    Beta
+                  </Badge>
+                )}
                 {tab.count !== undefined && <Badge variant="secondary" className="ml-1">{tab.count}</Badge>}
               </TabsTrigger>
             ))}
@@ -273,6 +280,9 @@ function App() {
           </TabsContent>
           <TabsContent value="tools" className="flex-1 overflow-auto m-0">
             <ToolsManager tools={state.tools} actions={actions} />
+          </TabsContent>
+          <TabsContent value="skill" className="flex-1 overflow-auto m-0">
+            <SkillPanel state={state} />
           </TabsContent>
           <TabsContent value="logs" className="flex-1 overflow-auto m-0">
             <LogsPanel logs={state.logs} actions={actions} />

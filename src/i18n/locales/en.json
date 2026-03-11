@@ -38,6 +38,7 @@
     "info": "Info",
     "routes": "Routes",
     "tools": "Tools",
+    "skill": "Skill",
     "logs": "Logs",
     "settings": "Settings"
   },
@@ -208,5 +209,28 @@
   "languages": {
     "zh-CN": "简体中文",
     "en": "English"
+  },
+  "skill": {
+    "title": "Skill Configuration",
+    "name": "Skill Name",
+    "namePlaceholder": "My MCP Skill",
+    "nameHint": "The skill name used in SKILL.md frontmatter.",
+    "usingDefault": "Using MCP name: {{name}}",
+    "description": "Skill Description",
+    "descriptionPlaceholder": "Use this skill when you need to interact with the MCP server for data processing, API calls, or tool execution.",
+    "descriptionHint": "Tell AI when to use this skill. This is the primary triggering mechanism.",
+    "usageNotes": "Usage Notes",
+    "usageNotesPlaceholder": "Add any additional notes, tips, or examples for using this service...",
+    "usageNotesHint": "Additional instructions or examples to help AI use this skill.",
+    "configSaved": "Skill configuration saved",
+    "contentCopied": "SKILL.md content copied to clipboard",
+    "fileDownloaded": "SKILL.md file downloaded",
+    "download": "Download",
+    "guide": {
+      "title": "How to Use",
+      "usage": "Copy or download SKILL.md to AI clients that support skills (Claude Code, OpenCode, OpenClaw, etc.)",
+      "example": "Example: Copy to ~/.claude/skills/{skillName}/SKILL.md",
+      "tip": "Write a detailed and precise name and description to help AI understand when to invoke this skill."
+    }
   }
 }
