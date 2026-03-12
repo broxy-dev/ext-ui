@@ -54,7 +54,19 @@
     "logs": "Logs",
     "resetWebId": "Reset ID",
     "resetWebIdConfirm": "Confirm Reset",
-    "resetWebIdMessage": "A new Web ID will be generated. The old endpoint will become invalid. Are you sure?"
+    "resetWebIdMessage": "A new Web ID will be generated. The old endpoint will become invalid. Are you sure?",
+    "usageGuide": "Usage Guide",
+    "collapse": "Collapse",
+    "expand": "Expand",
+    "mcpUsage": "MCP Endpoint",
+    "mcpUsageDesc": "Configure this endpoint in MCP clients:",
+    "apiUsage": "API Endpoint",
+    "apiUsageDesc": "Custom HTTP API endpoint. Add routes in the 'Routes' tab.",
+    "sampleConfig": "Sample Config",
+    "testCommands": "Test Commands",
+    "authRequired": "Authentication",
+    "authRequiredDesc": "Include Authorization header in all requests:",
+    "mcpClients": "Claude Code, Open Code, Trae, Cherry Studio, OpenClaw"
   },
   "toast": {
     "copySuccess": "Copied",

@@ -374,6 +374,32 @@ window.__BROXY_INIT_DATA__ = ${jsonStr};
 
         <div className="space-y-4">
           <div className="flex items-center gap-2">
+            <SettingsIcon className="h-4 w-4" />
+            <h3 className="font-medium">{t('settings.mcpConfig')}</h3>
+          </div>
+          <div className="space-y-3 pl-6">
+            <div className="space-y-2">
+              <Label>{t('settings.serviceName')}</Label>
+              <Input
+                value={mcpConfig.name}
+                onChange={(e) => setMcpConfig({ ...mcpConfig, name: e.target.value })}
+                placeholder={t('settings.serviceNamePlaceholder')}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>{t('settings.version')}</Label>
+              <Input
+                value={mcpConfig.version}
+                onChange={(e) => setMcpConfig({ ...mcpConfig, version: e.target.value })}
+                placeholder={t('settings.versionPlaceholder')}
+              />
+            </div>
+            <Button onClick={handleSaveConfig}>{t('settings.saveConfig')}</Button>
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          <div className="flex items-center gap-2">
             <Shield className="h-4 w-4" />
             <h3 className="font-medium">{t('settings.auth')}</h3>
           </div>
@@ -425,32 +451,6 @@ window.__BROXY_INIT_DATA__ = ${jsonStr};
 
         <div className="space-y-4">
           <div className="flex items-center gap-2">
-            <SettingsIcon className="h-4 w-4" />
-            <h3 className="font-medium">{t('settings.mcpConfig')}</h3>
-          </div>
-          <div className="space-y-3 pl-6">
-            <div className="space-y-2">
-              <Label>{t('settings.serviceName')}</Label>
-              <Input
-                value={mcpConfig.name}
-                onChange={(e) => setMcpConfig({ ...mcpConfig, name: e.target.value })}
-                placeholder={t('settings.serviceNamePlaceholder')}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>{t('settings.version')}</Label>
-              <Input
-                value={mcpConfig.version}
-                onChange={(e) => setMcpConfig({ ...mcpConfig, version: e.target.value })}
-                placeholder={t('settings.versionPlaceholder')}
-              />
-            </div>
-            <Button onClick={handleSaveConfig}>{t('settings.saveConfig')}</Button>
-          </div>
-        </div>
-
-        <div className="space-y-4">
-          <div className="flex items-center gap-2">
             <Code className="h-4 w-4" />
             <h3 className="font-medium">{t('settings.initScript')}</h3>
           </div>
@@ -482,7 +482,7 @@ window.__BROXY_INIT_DATA__ = ${jsonStr};
                 <Download className="h-4 w-4 mr-1" />
                 {t('settings.exportData')}
               </Button>
-              <Button variant="outline" onClick={handleExportScript}>
+              <Button variant="outline" onClick={handleExportScript} disabled>
                 <FileCode className="h-4 w-4 mr-1" />
                 {t('settings.exportScript')}
               </Button>

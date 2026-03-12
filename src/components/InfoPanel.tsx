@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
@@ -14,7 +15,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { useToast } from '@/hooks/useToast';
 import { useLocale } from '@/hooks/useLocale';
-import { Copy, RotateCcw } from 'lucide-react';
+import { Copy, RotateCcw, ChevronUp, ChevronDown, Box, Globe, Terminal } from 'lucide-react';
 import type { AppState } from '@/types';
 
 interface InfoPanelProps {
@@ -25,9 +26,11 @@ interface InfoPanelProps {
 export function InfoPanel({ state, onResetWebId }: InfoPanelProps) {
   const { toast } = useToast();
   const { t } = useLocale();
+  const [isGuideOpen, setIsGuideOpen] = useState(false);
 
   const apiUrl = `https://${state.workerDomain}/api/${state.webId}`;
   const mcpUrl = `https://${state.workerDomain}/mcp/${state.webId}`;
+  const serviceName = state.mcpConfig?.name || 'broxy';
 
   const handleCopy = async (text: string, name: string) => {
     try {
@@ -46,9 +49,41 @@ export function InfoPanel({ state, onResetWebId }: InfoPanelProps) {
     }
   };
 
+  const mcpConfigObj: Record<string, unknown> = {
+    type: 'remote',
+    url: mcpUrl,
+    enabled: true,
+  };
+
+  if (state.authEnabled) {
+    mcpConfigObj.headers = {
+      Authorization: `Bearer ${state.authToken}`,
+    };
+  }
+
+  const mcpConfigJson = JSON.stringify({
+    mcp: {
+      [serviceName]: mcpConfigObj,
+    },
+  }, null, 2);
+
+  let curlGetCmd = `curl ${apiUrl}/your-path`;
+  let curlPostCmd = `curl -X POST ${apiUrl}/your-path \\
+  -H "Content-Type: application/json" \\
+  -d '{"key":"value"}'`;
+
+  if (state.authEnabled) {
+    curlGetCmd = `curl -H "Authorization: Bearer ${state.authToken}" ${apiUrl}/your-path`;
+    curlPostCmd = `curl -X POST ${apiUrl}/your-path \\
+  -H "Content-Type: application/json" \\
+  -H "Authorization: Bearer ${state.authToken}" \\
+  -d '{"key":"value"}'`;
+  }
+
+  const curlCommands = `${curlGetCmd}\n\n${curlPostCmd}`;
+
   return (
     <div className="p-4 space-y-4">
-      {/* Statistics - at top */}
       <div className="grid grid-cols-3 gap-2 sm:gap-4 text-center">
         <div className="p-2 sm:p-3 rounded-lg bg-muted">
           <div className="text-xl sm:text-2xl font-bold">{state.routes.length}</div>
@@ -132,8 +167,81 @@ export function InfoPanel({ state, onResetWebId }: InfoPanelProps) {
             </Button>
           </div>
         </div>
+      </div>
 
+      <div className="border rounded-lg overflow-hidden">
+        <button
+          className="w-full flex items-center justify-between px-3 py-2 bg-muted hover:bg-muted/80 transition-colors"
+          onClick={() => setIsGuideOpen(!isGuideOpen)}
+        >
+          <span className="text-sm font-medium flex items-center gap-2">
+            <span className="text-amber-500">💡</span>
+            {t('info.usageGuide')}
+          </span>
+          {isGuideOpen ? (
+            <ChevronUp className="h-4 w-4 text-muted-foreground" />
+          ) : (
+            <ChevronDown className="h-4 w-4 text-muted-foreground" />
+          )}
+        </button>
 
+        {isGuideOpen && (
+          <div className="p-3 space-y-3 text-sm">
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 font-medium">
+                <Box className="h-4 w-4 text-primary" />
+                {t('info.mcpUsage')} (StreamableHTTP)
+              </div>
+              <div className="pl-6 space-y-1 text-muted-foreground">
+                <p>{t('info.mcpUsageDesc')}</p>
+                <p className="text-xs">{t('info.mcpClients')}</p>
+              </div>
+              <div className="pl-6">
+                <p className="text-xs text-muted-foreground mb-1">{t('info.sampleConfig')}：</p>
+                <div className="relative">
+                  <pre className="p-2 bg-muted rounded text-xs overflow-x-auto font-mono">
+                    {mcpConfigJson}
+                  </pre>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="absolute right-1 top-1 h-6 w-6"
+                    onClick={() => handleCopy(mcpConfigJson, t('info.sampleConfig'))}
+                  >
+                    <Copy className="h-3 w-3" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 font-medium">
+                <Globe className="h-4 w-4 text-blue-500" />
+                {t('info.apiUsage')}
+              </div>
+              <div className="pl-6 space-y-1 text-muted-foreground text-xs">
+                <p>{t('info.apiUsageDesc')}</p>
+              </div>
+              <div className="pl-6">
+                <div className="relative">
+                  <pre className="p-2 bg-muted rounded text-xs overflow-x-auto font-mono whitespace-pre-wrap">
+                    <span className="flex items-center gap-1 text-muted-foreground"><Terminal className="h-3 w-3" /> {t('info.testCommands')}:</span>
+                    {'\n'}
+                    {curlCommands}
+                  </pre>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="absolute right-1 top-1 h-6 w-6"
+                    onClick={() => handleCopy(curlCommands, t('info.testCommands'))}
+                  >
+                    <Copy className="h-3 w-3" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -54,7 +54,19 @@
     "logs": "日志",
     "resetWebId": "重置 ID",
     "resetWebIdConfirm": "确认重置",
-    "resetWebIdMessage": "重置后将生成新的 Web ID，旧的端点将失效。确定要重置吗？"
+    "resetWebIdMessage": "重置后将生成新的 Web ID，旧的端点将失效。确定要重置吗？",
+    "usageGuide": "使用说明",
+    "collapse": "收起",
+    "expand": "展开",
+    "mcpUsage": "MCP 端点",
+    "mcpUsageDesc": "在 MCP 客户端配置此端点：",
+    "apiUsage": "API 端点",
+    "apiUsageDesc": "自定义 HTTP API 端点，在「路由」Tab 添加自定义路由。",
+    "sampleConfig": "示例配置",
+    "testCommands": "测试命令",
+    "authRequired": "认证",
+    "authRequiredDesc": "所有请求需携带 Authorization header：",
+    "mcpClients": "Claude Code、Open Code、Trae、Cherry Studio、OpenClaw"
   },
   "toast": {
     "copySuccess": "复制成功",
