@@ -60,11 +60,11 @@ function App() {
 
   const tabs = [
     { value: 'info', icon: Info, label: t('tabs.info') },
-    { value: 'routes', icon: RouteIcon, label: t('tabs.routes'), count: state.routes.length },
+    { value: 'settings', icon: SettingsIcon, label: t('tabs.settings') },
     { value: 'tools', icon: Wrench, label: t('tabs.tools'), count: state.tools.length },
     { value: 'skill', icon: FileCode, label: t('tabs.skill'), beta: true },
+    { value: 'routes', icon: RouteIcon, label: t('tabs.routes'), beta: true },
     { value: 'logs', icon: FileText, label: t('tabs.logs'), count: state.logs.length },
-    { value: 'settings', icon: SettingsIcon, label: t('tabs.settings') },
   ];
 
   useEffect(() => {

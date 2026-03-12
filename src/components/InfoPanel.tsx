@@ -28,7 +28,6 @@ export function InfoPanel({ state, onResetWebId }: InfoPanelProps) {
 
   const apiUrl = `https://${state.workerDomain}/api/${state.webId}`;
   const mcpUrl = `https://${state.workerDomain}/mcp/${state.webId}`;
-  const swaggerUrl = `https://${state.workerDomain}/api/${state.webId}/swagger.json`;
 
   const handleCopy = async (text: string, name: string) => {
     try {
@@ -134,20 +133,7 @@ export function InfoPanel({ state, onResetWebId }: InfoPanelProps) {
           </div>
         </div>
 
-        <div className="space-y-2">
-          <Label>{t('info.swaggerDoc')}</Label>
-          <div className="relative">
-            <Input value={swaggerUrl} readOnly className="font-mono text-sm pr-10" />
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
-              onClick={() => handleCopy(swaggerUrl, 'Swagger')}
-            >
-              <Copy className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
+
       </div>
     </div>
   );
