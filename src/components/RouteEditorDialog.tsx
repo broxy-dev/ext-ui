@@ -18,7 +18,7 @@ import {
 } from '@/components/ui/select';
 import Editor from '@monaco-editor/react';
 import { useLocale } from '@/hooks/useLocale';
-import { useTheme } from '@/hooks/useTheme';
+import { useCurrentTheme } from '@/hooks/useTheme';
 import type { Route } from '@/types';
 
 interface RouteEditorDialogProps {
@@ -59,7 +59,7 @@ const defaultRoute: Omit<Route, 'id'> = {
 
 export function RouteEditorDialog({ open, route, onSave, onClose }: RouteEditorDialogProps) {
   const { t } = useLocale();
-  const { theme } = useTheme();
+  const theme = useCurrentTheme();
   const [formData, setFormData] = useState<Omit<Route, 'id'>>(defaultRoute);
   const [code, setCode] = useState(defaultRoute.handler);
 

@@ -74,6 +74,8 @@ export interface AppState {
   authToken: string;
   authEnabled: boolean;
   skillConfig: SkillConfig;
+  theme: string;
+  language: string;
 }
 
 // 通信消息类型

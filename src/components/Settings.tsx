@@ -9,7 +9,7 @@ import { useToast } from '@/hooks/useToast';
 import { useLocale } from '@/hooks/useLocale';
 import { CodeEditorDialog } from '@/components/CodeEditorDialog';
 import { ImportPreviewDialog } from '@/components/ImportPreviewDialog';
-import type { AppState, SkillConfig } from '@/types';
+import type { AppState } from '@/types';
 
 interface SettingsProps {
   state: AppState;
@@ -18,29 +18,8 @@ interface SettingsProps {
     saveAuth: (authToken: string, authEnabled: boolean) => Promise<void>;
     exportData: () => Promise<any>;
     importData: (data: any) => Promise<void>;
+    saveSkillConfig: (skillConfig: any) => Promise<void>;
   };
-}
-
-const SKILL_STORAGE_KEY = 'broxy-skill-config';
-
-function loadSkillConfig(): SkillConfig | null {
-  try {
-    const stored = localStorage.getItem(SKILL_STORAGE_KEY);
-    if (stored) {
-      return JSON.parse(stored);
-    }
-  } catch {
-    // ignore
-  }
-  return null;
-}
-
-function saveSkillConfig(config: SkillConfig): void {
-  try {
-    localStorage.setItem(SKILL_STORAGE_KEY, JSON.stringify(config));
-  } catch {
-    // ignore
-  }
 }
 
 export function Settings({ state, actions }: SettingsProps) {
@@ -144,10 +123,6 @@ export function Settings({ state, actions }: SettingsProps) {
 
   const handleExport = async () => {
     const data = await actions.exportData();
-    const skillConfig = loadSkillConfig();
-    if (skillConfig && data?.data) {
-      data.data.skillConfig = skillConfig;
-    }
     const jsonStr = JSON.stringify(data, null, 2);
     const blob = new Blob([jsonStr], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -168,10 +143,6 @@ export function Settings({ state, actions }: SettingsProps) {
 
   const handleExportScript = async () => {
     const data = await actions.exportData();
-    const skillConfig = loadSkillConfig();
-    if (skillConfig && data?.data) {
-      data.data.skillConfig = skillConfig;
-    }
     const jsonStr = JSON.stringify(data, null, 2);
     const name = data?.data?.mcpConfig?.name || 'config';
     const version = data?.data?.mcpConfig?.version || '1.0.0';
@@ -231,9 +202,6 @@ window.__BROXY_INIT_DATA__ = ${jsonStr};
     try {
       const data = JSON.parse(filePreviewContent);
       await actions.importData(data);
-      if (data?.data?.skillConfig) {
-        saveSkillConfig(data.data.skillConfig);
-      }
       setFilePreviewContent('');
       setShowFilePreviewDialog(false);
       toast({
@@ -264,9 +232,6 @@ window.__BROXY_INIT_DATA__ = ${jsonStr};
     try {
       const data = JSON.parse(importText);
       await actions.importData(data);
-      if (data?.data?.skillConfig) {
-        saveSkillConfig(data.data.skillConfig);
-      }
       setImportText('');
       setShowImportDialog(false);
       toast({
@@ -339,9 +304,6 @@ window.__BROXY_INIT_DATA__ = ${jsonStr};
     try {
       const data = JSON.parse(previewContent);
       await actions.importData(data);
-      if (data?.data?.skillConfig) {
-        saveSkillConfig(data.data.skillConfig);
-      }
       setImportUrl('');
       setPreviewContent('');
       setShowUrlDialog(false);

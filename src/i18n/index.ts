@@ -18,9 +18,7 @@ i18n
     fallbackLng: 'en',
     supportedLngs: ['zh-CN', 'en'],
     detection: {
-      order: ['localStorage', 'navigator'],
-      lookupLocalStorage: 'browser_bridge_language',
-      caches: ['localStorage'],
+      order: ['navigator'],
     },
     interpolation: {
       escapeValue: false,
@@ -29,10 +27,6 @@ i18n
   });
 
 export const detectLanguage = (): 'zh-CN' | 'en' => {
-  const stored = localStorage.getItem('browser_bridge_language');
-  if (stored && ['zh-CN', 'en'].includes(stored)) {
-    return stored as 'zh-CN' | 'en';
-  }
   const browserLang = navigator.language;
   if (browserLang.startsWith('zh')) {
     return 'zh-CN';

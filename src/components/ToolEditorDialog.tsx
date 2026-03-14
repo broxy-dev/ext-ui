@@ -21,7 +21,7 @@ import {
 import Editor from '@monaco-editor/react';
 import { Plus, Trash2 } from 'lucide-react';
 import { useLocale } from '@/hooks/useLocale';
-import { useTheme } from '@/hooks/useTheme';
+import { useCurrentTheme } from '@/hooks/useTheme';
 import type { MCPTool } from '@/types';
 
 interface ToolEditorDialogProps {
@@ -52,7 +52,7 @@ const defaultTool: Omit<MCPTool, 'id' | 'pattern'> = {
 
 export function ToolEditorDialog({ open, tool, onSave, onClose }: ToolEditorDialogProps) {
   const { t } = useLocale();
-  const { theme } = useTheme();
+  const theme = useCurrentTheme();
   const [formData, setFormData] = useState(defaultTool);
   const [code, setCode] = useState(defaultTool.handler);
   const [parameters, setParameters] = useState<Parameter[]>([]);

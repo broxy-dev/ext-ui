@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useBridgeMessage } from '@/hooks/useBridgeMessage';
-import { useLocale } from '@/hooks/useLocale';
+import { useLocale, type Language } from '@/hooks/useLocale';
 import { useTheme } from '@/hooks/useTheme';
 import { InfoPanel } from '@/components/InfoPanel';
 import { RoutesManager } from '@/components/RoutesManager';
@@ -35,10 +35,24 @@ function formatDuration(ms: number): string {
 
 function App() {
   const { state, actions, isConnecting, isMaximized, connectedAt } = useBridgeMessage();
-  const { t, currentLanguage, changeLanguage, languages } = useLocale();
-  const { theme, toggleTheme } = useTheme();
+  const { t, currentLanguage, changeLanguage: setLanguage, languages } = useLocale();
+  const { theme, toggleTheme } = useTheme({
+    externalTheme: state.theme,
+    onThemeChange: (newTheme) => actions.saveTheme(newTheme),
+  });
   const [connectionDuration, setConnectionDuration] = useState<string>('');
   const [activeTab, setActiveTab] = useState('info');
+
+  useEffect(() => {
+    if (state.language && ['zh-CN', 'en'].includes(state.language) && state.language !== currentLanguage) {
+      setLanguage(state.language as Language);
+    }
+  }, [state.language, currentLanguage, setLanguage]);
+
+  const changeLanguage = (lang: Language) => {
+    setLanguage(lang);
+    actions.saveLanguage(lang);
+  };
 
   const isConnected = state.status === 'connected';
   const isReconnecting = state.status === 'reconnecting';
@@ -282,7 +296,7 @@ function App() {
             <ToolsManager tools={state.tools} actions={actions} />
           </TabsContent>
           <TabsContent value="skill" className="flex-1 overflow-auto m-0">
-            <SkillPanel state={state} />
+            <SkillPanel state={state} actions={actions} />
           </TabsContent>
           <TabsContent value="logs" className="flex-1 overflow-auto m-0">
             <LogsPanel logs={state.logs} actions={actions} />

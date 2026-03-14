@@ -60,6 +60,20 @@ export default defineConfig({
             },
           },
         },
+        {
+          urlPattern: /^https:\/\/cdn\.jsdelivr\.net\/npm\/monaco-editor\/.*/i,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'monaco-editor-cache',
+            expiration: {
+              maxEntries: 100,
+              maxAgeSeconds: 60 * 60 * 24 * 365,
+            },
+            cacheableResponse: {
+              statuses: [0, 200],
+            },
+          },
+        },
       ],
     },
   })],

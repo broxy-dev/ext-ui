@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import Editor from '@monaco-editor/react';
 import { useLocale } from '@/hooks/useLocale';
-import { useTheme } from '@/hooks/useTheme';
+import { useCurrentTheme } from '@/hooks/useTheme';
 
 interface CodeEditorDialogProps {
   open: boolean;
@@ -35,7 +35,7 @@ export function CodeEditorDialog({
   readOnly = false,
 }: CodeEditorDialogProps) {
   const { t } = useLocale();
-  const { theme } = useTheme();
+  const theme = useCurrentTheme();
 
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>

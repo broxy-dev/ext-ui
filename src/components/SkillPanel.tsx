@@ -5,42 +5,23 @@ import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import Editor from '@monaco-editor/react';
 import { useLocale } from '@/hooks/useLocale';
-import { useTheme } from '@/hooks/useTheme';
+import { useCurrentTheme } from '@/hooks/useTheme';
 import { useToast } from '@/hooks/useToast';
 import { FileCode, Copy, Download, Info, Lightbulb } from 'lucide-react';
 import type { AppState, SkillConfig } from '@/types';
 
 interface SkillPanelProps {
   state: AppState;
+  actions: {
+    saveSkillConfig: (skillConfig: SkillConfig) => Promise<void>;
+  };
 }
-
-const STORAGE_KEY = 'broxy-skill-config';
 
 const defaultSkillConfig: SkillConfig = {
   name: '',
   description: '',
   usageNotes: '',
 };
-
-function loadSkillConfig(): SkillConfig {
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      return JSON.parse(stored);
-    }
-  } catch {
-    // ignore
-  }
-  return { ...defaultSkillConfig };
-}
-
-function saveSkillConfig(config: SkillConfig): void {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(config));
-  } catch {
-    // ignore
-  }
-}
 
 function generateSkillContent(
   skillConfig: SkillConfig,
@@ -134,23 +115,29 @@ ${skillConfig.usageNotes}
   return content;
 }
 
-export function SkillPanel({ state }: SkillPanelProps) {
+export function SkillPanel({ state, actions }: SkillPanelProps) {
   const { t } = useLocale();
-  const { theme } = useTheme();
+  const theme = useCurrentTheme();
   const { toast } = useToast();
   
-  const [formData, setFormData] = useState<SkillConfig>(() => loadSkillConfig());
+  const [formData, setFormData] = useState<SkillConfig>(() => {
+    const config = state.skillConfig || defaultSkillConfig;
+    return {
+      ...config,
+      name: config.name || state.mcpConfig?.name || '',
+    };
+  });
   const [hasChanges, setHasChanges] = useState(false);
 
   useEffect(() => {
-    const stored = loadSkillConfig();
+    const config = state.skillConfig || defaultSkillConfig;
     const configToUse = {
-      ...stored,
-      name: stored.name || state.mcpConfig?.name || '',
+      ...config,
+      name: config.name || state.mcpConfig?.name || '',
     };
     setFormData(configToUse);
     setHasChanges(false);
-  }, [state.mcpConfig?.name]);
+  }, [state.skillConfig, state.mcpConfig?.name]);
 
   const skillContent = useMemo(() => {
     return generateSkillContent(
@@ -163,8 +150,8 @@ export function SkillPanel({ state }: SkillPanelProps) {
     );
   }, [formData, state.mcpConfig?.name, state.webId, state.workerDomain, state.authEnabled, state.authToken]);
 
-  const handleSave = () => {
-    saveSkillConfig(formData);
+  const handleSave = async () => {
+    await actions.saveSkillConfig(formData);
     setHasChanges(false);
     toast({
       title: t('toast.saveSuccess'),

@@ -16,6 +16,8 @@ export function useBridgeMessage() {
     authToken: '',
     authEnabled: false,
     skillConfig: { name: '', description: '', usageNotes: '' },
+    theme: 'system',
+    language: '',
   });
 
   const [isConnecting, setIsConnecting] = useState(false);
@@ -75,6 +77,15 @@ export function useBridgeMessage() {
             break;
           case 'configChange':
             setState(prev => ({ ...prev, mcpConfig: data.mcpConfig, initScript: data.initScript }));
+            break;
+          case 'skillConfigChange':
+            setState(prev => ({ ...prev, skillConfig: data.skillConfig }));
+            break;
+          case 'themeChange':
+            setState(prev => ({ ...prev, theme: data.theme }));
+            break;
+          case 'languageChange':
+            setState(prev => ({ ...prev, language: data.language }));
             break;
         }
       }
@@ -144,6 +155,9 @@ export function useBridgeMessage() {
     getConfig: () => sendAction('getConfig'),
     saveConfig: (mcpConfig: any, initScript: string) => sendAction('saveConfig', { mcpConfig, initScript }),
     saveAuth: (authToken: string, authEnabled: boolean) => sendAction('saveAuth', { authToken, authEnabled }),
+    saveSkillConfig: (skillConfig: any) => sendAction('saveSkillConfig', { skillConfig }),
+    saveTheme: (theme: string) => sendAction('saveTheme', { theme }),
+    saveLanguage: (language: string) => sendAction('saveLanguage', { language }),
     exportData: () => sendAction('exportData'),
     importData: (data: any) => sendAction('importData', data),
     executeHandler: (handler: string, args: any, isTool: boolean) => 

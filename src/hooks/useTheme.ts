@@ -2,25 +2,9 @@ import { useState, useEffect } from 'react';
 
 type Theme = 'light' | 'dark';
 
-const OLD_THEME_KEY = 'browser-bridge-theme';
-const THEME_KEY = 'broxy-theme';
-
 function getSystemTheme(): Theme {
   if (typeof window === 'undefined') return 'light';
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-}
-
-function getStoredTheme(): Theme | null {
-  if (typeof window === 'undefined') return null;
-  
-  // 迁移旧数据
-  const oldTheme = localStorage.getItem(OLD_THEME_KEY);
-  if (oldTheme && !localStorage.getItem(THEME_KEY)) {
-    localStorage.setItem(THEME_KEY, oldTheme);
-    localStorage.removeItem(OLD_THEME_KEY);
-  }
-  
-  return localStorage.getItem(THEME_KEY) as Theme | null;
 }
 
 function applyTheme(theme: Theme) {
@@ -32,11 +16,50 @@ function applyTheme(theme: Theme) {
   }
 }
 
-export function useTheme() {
+export function getCurrentTheme(): Theme {
+  if (typeof window === 'undefined') return 'light';
+  return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+}
+
+export function useCurrentTheme(): Theme {
+  const [theme, setTheme] = useState<Theme>(() => getCurrentTheme());
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setTheme(getCurrentTheme());
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  return theme;
+}
+
+interface UseThemeOptions {
+  externalTheme?: string;
+  onThemeChange?: (theme: string) => void;
+}
+
+export function useTheme(options?: UseThemeOptions) {
+  const { externalTheme, onThemeChange } = options || {};
+
   const [theme, setTheme] = useState<Theme>(() => {
-    const stored = getStoredTheme();
-    return stored || getSystemTheme();
+    if (externalTheme && externalTheme !== 'system') {
+      return externalTheme as Theme;
+    }
+    return getSystemTheme();
   });
+
+  useEffect(() => {
+    if (externalTheme && externalTheme !== 'system' && externalTheme !== theme) {
+      setTheme(externalTheme as Theme);
+    }
+  }, [externalTheme, theme]);
 
   useEffect(() => {
     applyTheme(theme);
@@ -44,22 +67,21 @@ export function useTheme() {
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    
+
     const handleChange = (e: MediaQueryListEvent) => {
-      const stored = getStoredTheme();
-      if (!stored) {
+      if (!externalTheme || externalTheme === 'system') {
         setTheme(e.matches ? 'dark' : 'light');
       }
     };
 
     mediaQuery.addEventListener('change', handleChange);
     return () => mediaQuery.removeEventListener('change', handleChange);
-  }, []);
+  }, [externalTheme]);
 
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
     setTheme(newTheme);
-    localStorage.setItem(THEME_KEY, newTheme);
+    onThemeChange?.(newTheme);
   };
 
   return { theme, toggleTheme };
