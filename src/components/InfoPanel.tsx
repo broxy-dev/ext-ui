@@ -30,6 +30,7 @@ export function InfoPanel({ state, onResetWebId }: InfoPanelProps) {
 
   const apiUrl = `https://${state.workerDomain}/api/${state.webId}`;
   const mcpUrl = `https://${state.workerDomain}/mcp/${state.webId}`;
+  const skillUrl = `${apiUrl}/SKILL.md`;
   const serviceName = state.mcpConfig?.name || 'broxy';
 
   const handleCopy = async (text: string, name: string) => {
@@ -162,6 +163,21 @@ export function InfoPanel({ state, onResetWebId }: InfoPanelProps) {
               size="icon"
               className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
               onClick={() => handleCopy(apiUrl, 'API')}
+            >
+              <Copy className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <Label>{t('info.skillEndpoint')}</Label>
+          <div className="relative">
+            <Input value={skillUrl} readOnly className="font-mono text-sm pr-10" />
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
+              onClick={() => handleCopy(skillUrl, 'SKILL')}
             >
               <Copy className="h-4 w-4" />
             </Button>

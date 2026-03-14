@@ -46,6 +46,7 @@
     "webId": "Web ID",
     "apiEndpoint": "API Endpoint",
     "mcpEndpoint": "MCP Endpoint",
+    "skillEndpoint": "SKILL Endpoint",
     "swaggerDoc": "Swagger Doc",
     "workerDomain": "Worker Domain",
     "statistics": "Statistics",

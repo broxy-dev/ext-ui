@@ -46,6 +46,7 @@
     "webId": "Web ID",
     "apiEndpoint": "API 端点",
     "mcpEndpoint": "MCP 端点",
+    "skillEndpoint": "SKILL 端点",
     "swaggerDoc": "Swagger 文档",
     "workerDomain": "Worker 域名",
     "statistics": "统计",
