@@ -147,10 +147,10 @@ export function LogsPanel({ logs, actions }: LogsPanelProps) {
       return (
         <>
           {getLogIcon(log.type)}
-          <Badge variant={getLogTypeVariant(log.type)}>
+          <Badge variant={getLogTypeVariant(log.type)} className="hidden sm:inline-flex">
             {getLogTypeLabel(log.type, t)}
           </Badge>
-          <Badge variant={log.status === 'error' ? 'destructive' : 'success'}>
+          <Badge variant={log.status === 'error' ? 'destructive' : 'success'} className="hidden sm:inline-flex">
             {log.action ? getLogActionLabel(log.action, t) : log.status.toUpperCase()}
           </Badge>
           <span className="font-medium text-sm flex-1">
@@ -162,10 +162,10 @@ export function LogsPanel({ logs, actions }: LogsPanelProps) {
 
     return (
       <>
-        <Badge variant={log.type === 'mcp' ? 'default' : 'outline'}>
+        <Badge variant={log.type === 'mcp' ? 'default' : 'outline'} className="hidden sm:inline-flex">
           {log.type.toUpperCase()}
         </Badge>
-        <Badge variant={log.status === 'error' ? 'destructive' : 'success'}>
+        <Badge variant={log.status === 'error' ? 'destructive' : 'success'} className="hidden sm:inline-flex">
           {log.status.toUpperCase()}
         </Badge>
         <span className="font-medium text-sm">

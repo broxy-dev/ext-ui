@@ -159,7 +159,7 @@ function App() {
     <div className={`h-screen flex flex-col bg-background ${isMaximized ? 'rounded-none' : ''}`}>
       {/* Unified Header Bar */}
       <div 
-        className={`flex items-center justify-between px-3 py-1.5 border-b bg-muted ${!isMaximized ? 'cursor-move' : ''}`}
+        className={`flex items-center justify-between px-3 py-1 md:py-1.5 border-b bg-muted ${!isMaximized ? 'cursor-move' : ''}`}
         onMouseDown={handleDragStart}
         onTouchStart={handleDragStart}
       >
@@ -176,7 +176,7 @@ function App() {
               <Wifi className="h-3.5 w-3.5 group-hover:hidden" />
               <WifiOff className="h-3.5 w-3.5 hidden group-hover:block" />
               <span className="group-hover:hidden hidden sm:inline">{buttonConfig.text}</span>
-              <span className="hidden group-hover:inline sm:hidden">{buttonConfig.hoverText}</span>
+              <span className="hidden group-hover:sm:inline">{buttonConfig.hoverText}</span>
             </Button>
           ) : (
             <Button
