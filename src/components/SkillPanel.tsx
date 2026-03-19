@@ -31,15 +31,20 @@ function generateSkillContent(
   authEnabled: boolean,
   authToken: string
 ): string {
-  const skillName = skillConfig.name || mcpName || 'MCP Server';
+  const rawName = skillConfig.name || mcpName || 'MCP Server';
+  const formattedName = rawName
+    .toLowerCase()
+    .replace(/[^a-z0-9-]/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
   const skillDescription = skillConfig.description || 'Use this skill to interact with the MCP server via HTTP requests.';
 
   let content = `---
-name: ${skillName}
+name: ${formattedName}
 description: ${skillDescription}
 ---
 
-# ${skillName}
+# ${rawName}
 
 ## Parameters
 
@@ -193,7 +198,8 @@ export function SkillPanel({ state, actions }: SkillPanelProps) {
   };
 
   const updateField = (field: keyof SkillConfig, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    const processedValue = field === 'description' ? value.replace(/\n/g, ' ') : value;
+    setFormData(prev => ({ ...prev, [field]: processedValue }));
     setHasChanges(true);
   };
 
