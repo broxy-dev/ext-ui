@@ -67,7 +67,11 @@
     "testCommands": "测试命令",
     "authRequired": "认证",
     "authRequiredDesc": "所有请求需携带 Authorization header：",
-    "mcpClients": "Claude Code、Open Code、Trae、Cherry Studio、OpenClaw"
+    "mcpClients": "Claude Code、Open Code、Trae、Cherry Studio、OpenClaw",
+    "skillUsage": "SKILL 端点",
+    "skillUsageDesc1": "复制 SKILL 端点地址，到 AI 助手的 skills 配置目录（~/.claude/skills/、~/.openclaw/skills/、~/.opencode/skills/）中创建一个目录（如 broxy-demo），然后使用 wget 等工具把 SKILL.md 文件下载到新建的目录。重新加载 AI 助手即可识别。",
+    "skillUsageDesc2": "或者更简单的，直接把 SKILL 地址发给 AI 助手，让它安装到 skills 目录下。",
+    "skillUsageTip": "提示：详细精准的名称和描述能帮助 AI 理解何时调用此技能。"
   },
   "toast": {
     "copySuccess": "复制成功",

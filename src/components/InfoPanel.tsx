@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { useToast } from '@/hooks/useToast';
 import { useLocale } from '@/hooks/useLocale';
-import { Copy, RotateCcw, ChevronUp, ChevronDown, Box, Globe, Terminal } from 'lucide-react';
+import { Copy, RotateCcw, ChevronUp, ChevronDown, Box, Globe, Terminal, FileCode } from 'lucide-react';
 import type { AppState } from '@/types';
 
 interface InfoPanelProps {
@@ -254,6 +254,18 @@ export function InfoPanel({ state, onResetWebId }: InfoPanelProps) {
                     <Copy className="h-3 w-3" />
                   </Button>
                 </div>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 font-medium">
+                <FileCode className="h-4 w-4 text-green-500" />
+                {t('info.skillUsage')}
+              </div>
+              <div className="pl-6 space-y-1 text-muted-foreground text-xs">
+                <p>{t('info.skillUsageDesc1')}</p>
+                <p>{t('info.skillUsageDesc2')}</p>
+                <p className="text-amber-600 dark:text-amber-500">{t('info.skillUsageTip')}</p>
               </div>
             </div>
           </div>

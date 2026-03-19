@@ -67,7 +67,11 @@
     "testCommands": "Test Commands",
     "authRequired": "Authentication",
     "authRequiredDesc": "Include Authorization header in all requests:",
-    "mcpClients": "Claude Code, Open Code, Trae, Cherry Studio, OpenClaw"
+    "mcpClients": "Claude Code, Open Code, Trae, Cherry Studio, OpenClaw",
+    "skillUsage": "SKILL Endpoint",
+    "skillUsageDesc1": "Copy the SKILL endpoint URL, create a directory (e.g., broxy-demo) in your AI assistant's skills folder (~/.claude/skills/, ~/.openclaw/skills/, ~/.opencode/skills/), then use wget to download SKILL.md to that directory. Reload the AI assistant to recognize it.",
+    "skillUsageDesc2": "Or simply send the SKILL URL to your AI assistant and ask it to install to the skills directory.",
+    "skillUsageTip": "Tip: A detailed name and description helps AI understand when to use this skill."
   },
   "toast": {
     "copySuccess": "Copied",
