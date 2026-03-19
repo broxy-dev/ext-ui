@@ -444,7 +444,7 @@ window.__BROXY_INIT_DATA__ = ${jsonStr};
                 <Download className="h-4 w-4 mr-1" />
                 {t('settings.exportData')}
               </Button>
-              <Button variant="outline" onClick={handleExportScript} disabled>
+              <Button variant="outline" onClick={handleExportScript}>
                 <FileCode className="h-4 w-4 mr-1" />
                 {t('settings.exportScript')}
               </Button>

@@ -221,8 +221,8 @@ export function SkillPanel({ state, actions }: SkillPanelProps) {
         </div>
       </div>
 
-      <div className="flex-1 flex overflow-hidden">
-        <div className="w-1/3 border-r flex flex-col">
+      <div className="flex-1 flex flex-col md:flex-row overflow-auto md:overflow-hidden">
+        <div className="w-full md:w-1/3 border-b md:border-r flex flex-col">
           <ScrollArea className="flex-1">
             <div className="p-4 space-y-4">
               <div className="space-y-2">
@@ -279,14 +279,14 @@ export function SkillPanel({ state, actions }: SkillPanelProps) {
           </ScrollArea>
         </div>
 
-        <div className="w-2/3 flex flex-col">
+        <div className="w-full md:w-2/3 flex flex-col">
           <div className="px-4 py-2 border-b bg-muted/50 flex items-center justify-between">
             <span className="text-sm font-medium text-muted-foreground">SKILL.md</span>
             {resolvedName && (
               <span className="text-xs text-muted-foreground">name: {resolvedName}</span>
             )}
           </div>
-          <div className="flex-1">
+          <div className="h-[300px] md:flex-1">
             <Editor
               height="100%"
               defaultLanguage="markdown"
